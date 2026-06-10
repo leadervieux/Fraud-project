@@ -1,0 +1,15 @@
+# Données
+*.csv
+*.xlsx
+*.parquet
+*.pkl
+data/
+
+# Fichiers système et IDE
+.ipynb_checkpoints/
+.DS_Store
+venv/
+.finance/
+__pycache__/
+.vscode/
+.idea/
