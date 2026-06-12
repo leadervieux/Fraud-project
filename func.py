@@ -89,8 +89,8 @@ def mat_corr(df, column):
     plt.show()
     return
 
-def PCA_func(df, column, n_components=2):
-    cols = [col for col in df.columns if df[col].nunique() > 1 and col.startswith(column) and df[col].nunique() > 1]
+def PCA_func(df, column, n_components):
+    cols = [col for col in df.columns if df[col].nunique() > 1 and col.startswith(column) and df[col].nunique() > 1 and not col.endswith('_isMissing')]
     df_pca = df[cols].copy()
 
     #NaN as median
