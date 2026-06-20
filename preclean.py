@@ -11,7 +11,7 @@ HIGH_CARD_COLS = ['P_emaildomain', 'R_emaildomain', 'DeviceInfo', 'id_30', 'id_3
 # Binary columns  
 BINARY_M_COLS = ['M1','M2', 'M3', 'M5', 'M6', 'M7', 'M8', 'M9']
 
-BINARY_ID_COLS = ['id_12','id_27','id_28','id_29','id_36','id_37','id_38','DeviceType']
+BINARY_ID_COLS = ['id_12','id_16', 'id_35','id_27','id_28','id_29','id_36','id_37','id_38','DeviceType']
 
 # Columns between 3 and 10 values
 MID_CARD_COLS = ['M4', 'ProductCD', 'card4', 'card6']
@@ -106,6 +106,12 @@ def preprocess_transac(df_transac: pd.DataFrame) -> pd.DataFrame:
         df['P_emaildomain'] = df['P_emaildomain'].apply(simplify_email)
         df['R_emaildomain'] = df['R_emaildomain'].apply(simplify_email)
 
+
+    for col in ['P_emaildomain', 'R_emaildomain']:
+        if col in df.columns:
+            df[col] = df[col].fillna('Other')
+            df = pd.get_dummies(df, columns=[col], prefix=col, dtype=int)
+
     return df
 
 
@@ -126,11 +132,11 @@ def preprocess_id(df_id: pd.DataFrame) -> pd.DataFrame:
     if 'id_28' in df.columns:
         df = clean_binary_cols(df, 'id_28', mapping_status)
     
-    for col in ['id_12', 'id_23','id_27','id_29']:
+    for col in ['id_12', 'id_35', 'id_23','id_27','id_29']:
         if col in df.columns:
             df = clean_binary_cols(df, col, mapping_identity)
 
-    for col in ['id_36', 'id_37', 'id_38']:
+    for col in ['id_16','id_36', 'id_37', 'id_38']:
         if col in df.columns:
             df = clean_binary_cols(df, col, mapping_tf)
 
@@ -167,7 +173,14 @@ def preprocess_id(df_id: pd.DataFrame) -> pd.DataFrame:
         if col in df.columns:
             df[col] = df[col].fillna('Missing')
             df = pd.get_dummies(df, columns=[col], prefix=col, dtype=int)
-    
+
+
+    cols_to_encode = ['P_emaildomain', 'R_emaildomain','os_family', 'browser_family', 'DeviceInfo_brand']
+    for col in cols_to_encode:
+        if col in df.columns:
+            df[col] = df[col].fillna('Missing')
+            df = pd.get_dummies(df, columns=[col], prefix=col, dtype=int)
+        
 
     return df
 
@@ -214,7 +227,7 @@ def preprocessing(df_transac: pd.DataFrame, df_id: pd.DataFrame) -> pd.DataFrame
 
 
 
-    print(f"✅ Shape finale : {df_combined.shape}")
-    print(f"   NaN résiduels (float, gérés par XGBoost) : {df_combined.isnull().sum().sum()}")
+    print(f" Final shape: {df_combined.shape}")
+    print(f"  Residuals NaN (float) : {df_combined.isnull().sum().sum()}")
 
     return df_combined
