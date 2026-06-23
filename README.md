@@ -23,11 +23,16 @@ ieee-fraud-detection/
 ├── README.md
 ├── requirements.txt
 ├── notebooks/
-│   ├── 01_EDA_transaction.ipynb   # Exploratory analysis — transaction data
+│   ├── 01_EDA_transaction.ipynb  # Exploratory analysis — transaction data
 │   ├── 02_EDA_identity.ipynb      # Exploratory analysis — identity data
-│   └── 03_modeling_final.ipynb    # XGBoost pipeline, Optuna tuning, results
-└── src/
-    └── preclean.py                # Full preprocessing pipeline
+│   ├── 03_model.ipynb             # XGBoost pipeline, Optuna tuning, results
+│   └── 03_temporal_model.ipynb    # TimeSeriesPlit pipeline,results
+├── src/
+│   ├── preclean.py                # Full preprocessing pipeline
+│   └── func.ipynb                 # Function for the EDA
+└── outputs/
+    ├── feature_Importance.py     # Most important features with XGBoost
+    └── submission.csv            # Results with transactions and isFraud
 ```
 
 ---
@@ -90,11 +95,14 @@ The optimization converged after only **6 trials out of 10**, confirming the sea
 
 ---
 
+- **Temporal validation** — replaced StratifiedKFold with TimeSeriesSplit
+  to better reflect real-world conditions where the model predicts future
+  transactions based on past data only. Cross-validation AUC dropped from
+  0.96 to X.XX, giving a more honest estimate of generalization.
+
 ## Future Improvements
 
 - **Feature engineering** — aggregate features per card (average transaction amount, frequency of use) and anomaly ratio features (e.g. "this transaction is 5x the usual amount for this card")
-- **Temporal validation** — the Kaggle test set is chronologically later than the train set; replacing random StratifiedKFold with a time-based split would give a more honest estimate of real-world performance and reduce the gap between cross-validation AUC (0.96) and private leaderboard (0.89)
-
 ---
 
 ## How to Run
