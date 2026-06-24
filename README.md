@@ -78,7 +78,14 @@ Bayesian optimization using Optuna's TPE sampler over 20 trials:
 | `reg_alpha` | [1e-3, 10.0] (log scale) |
 | `reg_lambda` | [1e-3, 10.0] (log scale) |
 
-The optimization converged after only **6 trials out of 10**, confirming the search space was well-targeted from the start.
+The optimization converged after only **6 trials out of 15**, confirming the search space was well-targeted from the start.
+
+### 5. Temporal Validation
+Replaced StratifiedKFold with TimeSeriesSplit to better reflect
+real-world conditions. Cross-validation AUC dropped from 0.96 to 0.88,
+confirming that random splitting overestimated performance on this
+chronological dataset. The temporal AUC (0.88) aligns closely with the
+Kaggle private score (0.8921).
 
 ---
 
@@ -95,11 +102,6 @@ The optimization converged after only **6 trials out of 10**, confirming the sea
 
 ---
 
-- **Temporal validation** — replaced StratifiedKFold with TimeSeriesSplit
-  to better reflect real-world conditions where the model predicts future
-  transactions based on past data only. Cross-validation AUC dropped from
-  0.96 to X.XX, giving a more honest estimate of generalization.
-
 ## Future Improvements
 
 - **Feature engineering** — aggregate features per card (average transaction amount, frequency of use) and anomaly ratio features (e.g. "this transaction is 5x the usual amount for this card")
@@ -109,7 +111,7 @@ The optimization converged after only **6 trials out of 10**, confirming the sea
 
 ```bash
 # Clone the repo
-git clone https://github.com/your-username/ieee-fraud-detection.git
+git clone https://github.com/leadervieux/Fraud-project.git
 cd ieee-fraud-detection
 
 # Install dependencies
