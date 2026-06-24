@@ -66,7 +66,7 @@ XGBoost handles NaN values natively — float columns (V*, C*, D*) were intentio
 - **Predictions**: averaged across the 5 fold models (ensembling) rather than retraining a separate final model
 
 ### 4. Hyperparameter Tuning (Optuna)
-Bayesian optimization using Optuna's TPE sampler over 20 trials:
+Bayesian optimization using Optuna's TPE sampler over 15 trials:
 
 | Parameter | Search range |
 |---|---|
